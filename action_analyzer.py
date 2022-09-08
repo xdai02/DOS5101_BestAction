@@ -487,11 +487,11 @@ class ActionAnalyzer:
         event_index = len(self.__year_data) - 1
         event = self.__events_happened[event_index]
 
-        # find the best action, and do it
-        best_action = self.__find_next_best_actions(verbose)
-        self.__take_action(best_action, event)
+        # find the best actions, and do it
+        best_actions = self.__find_next_best_actions(verbose)
+        self.__take_action(best_actions, event)
 
-        return best_action
+        return best_actions
 
     def __update_data(self):
         """
@@ -603,7 +603,7 @@ class ActionAnalyzer:
 
             # print details for this combination if verbose is on
             if verbose:
-                print(action_combination)
+                print("Trial:", action_combination)
                 print(self.get_year_data())
 
             # save the best solution based on Operating Profit
@@ -627,8 +627,8 @@ def main():
     )
 
     # start analyzing
-    best_action = action_analyzer.analyze(verbose=True)
-    print("Best Action:", best_action)
+    best_actions = action_analyzer.analyze(verbose=True)
+    print("Best Actions:", best_actions)
 
     # print result
     year_data = action_analyzer.get_year_data()
