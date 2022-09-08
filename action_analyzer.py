@@ -3,7 +3,11 @@
 """
 ACTIONS_HAPPENED = [
     (4, 11, 13),  # year 1
-    # (2, 9, 16),  # year 2
+    (2, 9, 16),  # year 2
+    None,  # year 3
+    None,  # year 4
+    None,  # year 5
+    None,  # year 6
 ]
 
 """
@@ -11,6 +15,11 @@ ACTIONS_HAPPENED = [
 """
 EVENTS_HAPPENED = [
     5,  # year 1
+    None,  # year 2
+    None,  # year 3
+    None,  # year 4
+    None,  # year 5
+    None,  # year 6
 ]
 
 """
@@ -77,7 +86,7 @@ ACTIONS = [
 
     # Action 4: Create more varieties with localized taste to cater to Southeast Asian markets
     {
-        "cogs": (0.12, True),  # increase by 12% from Year + 1
+        "num_of_units_sold": (0.12, True),  # increase by 12% from Year + 1
         "fg_inventory_holding": (0.03, False),  # increase by 3%
         "logistics_cost": (0.05, False),  # increase by 5%
     },
@@ -162,108 +171,57 @@ CONSTRAINS = [
 
 """
     Event List
-    Each event contains a collection of actions affected and a boolean value indicates that the effect is taken for the 
-    next year.
+    Each event contains a collection of actions affected.
 """
 EVENTS = [
     # Event 1: Demand for instant noodles surge in Asian markets. Those who took Action 2 have a 15% increase in sales.
     # Those that did not take Action 2 have no impact
     {
-        "Action_2": {"num_of_units_sold": (0.15, True)}
+        "Action_2": {"num_of_units_sold": 0.15},
+        "Others": {},
     },
 
     # Event 2: A resurgence of new Covid-19 variants causes reduction in retail demand. Those who took Action 10 have a
     # 20% drop in sales. Those that did not take Action 10 have no impact.
     {
-        "Action_10": {"num_of_units_sold": (-0.2, True)}
+        "Action_10": {"num_of_units_sold": -0.2},
+        "Others": {},
     },
 
     # Event 3: Customers become more demanding due to competition from the global manufacturers. Those who took Action 7
     # have a 10% increase in sales. Those who did not take Action 7 have a 10% decrease in sales.
     {
-        "Action_7": {"num_of_units_sold": (0.1, True)},
-        "Action_1": {"num_of_units_sold": (-0.1, True)},
-        "Action_2": {"num_of_units_sold": (-0.1, True)},
-        "Action_3": {"num_of_units_sold": (-0.1, True)},
-        "Action_4": {"num_of_units_sold": (-0.1, True)},
-        "Action_5": {"num_of_units_sold": (-0.1, True)},
-        "Action_6": {"num_of_units_sold": (-0.1, True)},
-        "Action_8": {"num_of_units_sold": (-0.1, True)},
-        "Action_9": {"num_of_units_sold": (-0.1, True)},
-        "Action_10": {"num_of_units_sold": (-0.1, True)},
-        "Action_11": {"num_of_units_sold": (-0.1, True)},
-        "Action_12": {"num_of_units_sold": (-0.1, True)},
-        "Action_13": {"num_of_units_sold": (-0.1, True)},
-        "Action_14": {"num_of_units_sold": (-0.1, True)},
-        "Action_15": {"num_of_units_sold": (-0.1, True)},
-        "Action_16": {"num_of_units_sold": (-0.1, True)},
+        "Action_7": {"num_of_units_sold": 0.1},
+        "Others": {"num_of_units_sold": -0.1},
     },
 
     # Event 4: Export restrictions on wheat are imposed in major producing countries due to global shortage. Those who
     # took action 3 are not affected.  Those who did not take action 3 have a 5% increase in COGS due to higher 
     # purchasing costs
     {
-        "Action_1": {"cogs": (0.05, True)},
-        "Action_2": {"cogs": (0.05, True)},
-        "Action_4": {"cogs": (0.05, True)},
-        "Action_5": {"cogs": (0.05, True)},
-        "Action_6": {"cogs": (0.05, True)},
-        "Action_7": {"cogs": (0.05, True)},
-        "Action_8": {"cogs": (0.05, True)},
-        "Action_9": {"cogs": (0.05, True)},
-        "Action_10": {"cogs": (0.05, True)},
-        "Action_11": {"cogs": (0.05, True)},
-        "Action_12": {"cogs": (0.05, True)},
-        "Action_13": {"cogs": (0.05, True)},
-        "Action_14": {"cogs": (0.05, True)},
-        "Action_15": {"cogs": (0.05, True)},
-        "Action_16": {"cogs": (0.05, True)},
+        "Action_3": {},
+        "Others": {"cogs": 0.05},
     },
 
-    # Event 5: Shipping costs skyrocket.  Those who took action 6 have no impact. Those who did not take action 6 have
+    # Event 5: Shipping costs skyrocket. Those who took action 6 have no impact. Those who did not take action 6 have
     # their logistics costs increase by 10%
     {
-        "Action_1": {"logistics_cost": (0.1, True)},
-        "Action_2": {"logistics_cost": (0.1, True)},
-        "Action_3": {"logistics_cost": (0.1, True)},
-        "Action_4": {"logistics_cost": (0.1, True)},
-        "Action_5": {"logistics_cost": (0.1, True)},
-        "Action_7": {"logistics_cost": (0.1, True)},
-        "Action_8": {"logistics_cost": (0.1, True)},
-        "Action_9": {"logistics_cost": (0.1, True)},
-        "Action_10": {"logistics_cost": (0.1, True)},
-        "Action_11": {"logistics_cost": (0.1, True)},
-        "Action_12": {"logistics_cost": (0.1, True)},
-        "Action_13": {"logistics_cost": (0.1, True)},
-        "Action_14": {"logistics_cost": (0.1, True)},
-        "Action_15": {"logistics_cost": (0.1, True)},
-        "Action_16": {"logistics_cost": (0.1, True)},
+        "Action_6": {},
+        "Others": {"logistics_cost": 0.1},
     },
 
-    # Event 6: There is an increase in consumer awareness for sustainable sourcing practices.  Those who took Action 8
+    # Event 6: There is an increase in consumer awareness for sustainable sourcing practices. Those who took Action 8
     # have an increase in sales by 20%. Those who did not take action 8 have no impact
     {
-        "Action_8": {"num_of_units_sold": (0.2, True)},
+        "Action_8": {"num_of_units_sold": 0.2},
+        "Others": {}
     },
 
     # Event 7: A heatwave causes electricity outage. Those who took Action 16 have no impact. Those who did not take
     # Action 16 have a 20% drop in sales
     {
-        "Action_1": {"num_of_units_sold": (-0.2, True)},
-        "Action_2": {"num_of_units_sold": (-0.2, True)},
-        "Action_3": {"num_of_units_sold": (-0.2, True)},
-        "Action_4": {"num_of_units_sold": (-0.2, True)},
-        "Action_5": {"num_of_units_sold": (-0.2, True)},
-        "Action_6": {"num_of_units_sold": (-0.2, True)},
-        "Action_7": {"num_of_units_sold": (-0.2, True)},
-        "Action_8": {"num_of_units_sold": (-0.2, True)},
-        "Action_9": {"num_of_units_sold": (-0.2, True)},
-        "Action_10": {"num_of_units_sold": (-0.2, True)},
-        "Action_11": {"num_of_units_sold": (-0.2, True)},
-        "Action_12": {"num_of_units_sold": (-0.2, True)},
-        "Action_13": {"num_of_units_sold": (-0.2, True)},
-        "Action_14": {"num_of_units_sold": (-0.2, True)},
-        "Action_15": {"num_of_units_sold": (-0.2, True)},
+        "Action_16": {},
+        "Others": {"num_of_units_sold": -0.2},
     },
 ]
 
@@ -304,9 +262,10 @@ class ActionAnalyzer:
             Returns Year X's data in readable format
         """
         year_data = self.__year_data[year_num]
+        year = len(self.__year_data) - 1 if year_num == -1 else year_num
 
         year_data_str = ""
-        year_data_str += "=" * 50 + "\n"
+        year_data_str += "=" * 21 + (" Year %d " % year) + "=" * 21 + "\n"
 
         year_data_str += "[Market]\n"
         year_data_str += "Number of units sold                : %.2f\n" % year_data["num_of_units_sold"]
@@ -346,16 +305,58 @@ class ActionAnalyzer:
 
         year_data_str += "[SG&A]                            : %.2f%%\n" % (year_data["sga"] * 100)
 
+        year_data_str += "-" * 50 + "\n"
+
+        year_data_str += "Revenue                           : %.2f\n" % self.get_revenue(year_num)
+        year_data_str += "    unit price                    : %.2f\n" % self.get_unit_price(year_num)
+        year_data_str += "    no. of units                  : %d\n" % self.get_units_sold(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "COGS                              : %.2f\n" % self.get_cogs(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "Gross Profit                      : %.2f\n" % self.get_gross_profit(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "R&D                               : %.2f\n" % self.get_rd(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "SG&A                              : %.2f\n" % self.get_sga(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "Logistics                         : %.2f\n" % self.get_logistics(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "Depreciation                      : %.2f\n" % self.get_depreciation(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "FG Inventory                      : %.2f\n" % self.get_fg_inventory(year_num)
+        year_data_str += "Raw Materials Inventory           : %.2f\n" % self.get_raw_materials_inventory(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "Inventory Holding Cost            : %.2f\n" % self.get_inventory_holding_cost(year_num)
+        year_data_str += "Inventory obsolescence            : %.2f\n" % self.get_inventory_obsolescence(year_num)
+        year_data_str += "\n"
+
+        year_data_str += "Operating Profit                  : %.2f\n" % self.get_operating_profit(year_num)
+
         year_data_str += "=" * 50 + "\n"
 
         return year_data_str
 
     def get_revenue(self, year_num=-1):
         """
-            Revenue = num_of_units_sold * unit_price
+            Revenue = Units Sold * Unit Price
         """
+        return self.get_units_sold(year_num) * self.get_unit_price(year_num)
+
+    def get_unit_price(self, year_num=-1):
         year_data = self.__year_data[year_num]
-        return year_data["num_of_units_sold"] * year_data["unit_price"]
+        return year_data["unit_price"]
+
+    def get_units_sold(self, year_num=-1):
+        year_data = self.__year_data[year_num]
+        return year_data["num_of_units_sold"]
 
     def get_cogs(self, year_num=-1):
         """
@@ -411,10 +412,10 @@ class ActionAnalyzer:
 
     def get_raw_materials_inventory(self, year_num=-1):
         """
-            Raw Materials Inventory = Revenue * rm_inventory_value
+            Raw Materials Inventory = Revenue * rm_inventory_value * rm_inventory_holding
         """
         year_data = self.__year_data[year_num]
-        return self.get_revenue(year_num) * year_data["rm_inventory_value"]
+        return self.get_revenue(year_num) * year_data["rm_inventory_value"] * year_data["rm_inventory_holding"]
 
     def get_inventory_holding_cost(self, year_num=-1):
         """
@@ -458,14 +459,30 @@ class ActionAnalyzer:
         """
             Update data based on the actions already taken
         """
-        for action in self.__actions_happened:
-            self.take_action(action)
+        for i, action in enumerate(self.__actions_happened):
+            self.take_action(action, self.__events_happened[i])
 
-    def take_action(self, actions):
+    def __is_valid_actions(self, actions):
         """
-            Take given actions
+            Check if the actions are valid.
+            Invalid actions if
+                1. actions is None
+                2. action conflicts
+                3. action used exceeds max action counter
+        """
+        return actions \
+               and not all(elem in self.__constrains for elem in actions) \
+               and all(self.__action_counter[action - 1] > 0 for action in actions)
+
+    def take_action(self, actions, event_happened):
+        """
+            Take given actions and event in a year
             :param actions: a tuple of actions
+            :param event_happened: event happened for this year
         """
+        if not self.__is_valid_actions(actions):
+            return
+
         # add delayed effects to current effects
         action_effects = self.__delayed_effects.copy()
         self.__delayed_effects.clear()
@@ -488,13 +505,29 @@ class ActionAnalyzer:
         current_year_data = self.__year_data[-1].copy()
         self.__year_data.append(current_year_data)
 
+        # calculate data after effects
         for effect_name, effect_rate in action_effects.items():
             # number of factories/equipment are increased/decreased by an integer
-            if effect_name == "num_of_factories" or effect_name == "num_of_equipment":
+            if effect_name in ["num_of_factories", "num_of_equipment"]:
                 current_year_data[effect_name] += effect_rate
             # others are increased/decreased by a percentage
             else:
                 current_year_data[effect_name] *= (1 + effect_rate)
+
+        # add event to delayed effects
+        if event_happened:
+            event_index = event_happened - 1
+            event = self.__events[event_index]
+
+            # find specific event effect from the event
+            for action in actions:
+                if "Action_%d" % action in event:
+                    event_effect = event["Action_%d" % action]
+                    break
+            else:
+                event_effect = event["Others"]
+            if event_effect:
+                self.__delayed_effects.update(event_effect)
 
 
 def main():
@@ -507,7 +540,7 @@ def main():
     action_analyzer.analyze()
 
     # print result
-    year_data = action_analyzer.get_year_data(1)
+    year_data = action_analyzer.get_year_data(2)
     print(year_data)
 
 
