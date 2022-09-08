@@ -1,3 +1,5 @@
+import itertools
+
 """
     Actions already happened
 """
@@ -60,6 +62,16 @@ YEAR_DATA = [
     All actions are allowed to be used at most 3 times
 """
 MAX_ACTION_REPEAT = 3
+
+"""
+    Number of actions selected for a year
+"""
+ACTION_SELECTED_NUM = 3
+
+"""
+    Number of actions
+"""
+ACTION_NUM = 16
 
 """
     Action List
@@ -170,6 +182,11 @@ CONSTRAINS = [
 ]
 
 """
+    Number of events
+"""
+EVENT_NUM = 7
+
+"""
     Event List
     Each event contains a collection of actions affected.
 """
@@ -233,6 +250,15 @@ def dict_add(dictionary, key, value, default_value=0):
     if key not in dictionary:
         dictionary[key] = default_value
     dictionary[key] += value
+
+
+def combination(n=0, k=0):
+    """
+        Generate all the combinations of n chooses k (nCk)
+        :return: returns a list of action combinations
+    """
+    actions = [i for i in range(1, n + 1)]
+    return list(itertools.combinations(actions, k))
 
 
 class ActionAnalyzer:
@@ -449,40 +475,55 @@ class ActionAnalyzer:
                - self.get_logistics(year_num) - self.get_depreciation(year_num) \
                - self.get_inventory_holding_cost(year_num) - self.get_inventory_obsolescence(year_num)
 
-    def analyze(self):
+    def analyze(self, verbose=False):
         """
             Analyze actions for next year
+            :param verbose: set to True to view all the combination details
         """
+        # update data up to date
         self.__update_data()
+
+        # event to be happened in this year
+        event_index = len(self.__year_data) - 1
+        event = self.__events_happened[event_index]
+
+        # find the best action, and do it
+        best_action = self.__find_next_best_actions(verbose)
+        self.__take_action(best_action, event)
+
+        return best_action
 
     def __update_data(self):
         """
             Update data based on the actions already taken
         """
         for i, action in enumerate(self.__actions_happened):
-            self.take_action(action, self.__events_happened[i])
+            if self.__is_valid_actions(action):
+                self.__take_action(action, self.__events_happened[i])
 
     def __is_valid_actions(self, actions):
         """
             Check if the actions are valid.
             Invalid actions if
                 1. actions is None
-                2. action conflicts
-                3. action used exceeds max action counter
+                2. actions conflict
+                3. actions used exceeds max action counter
         """
-        return actions \
-               and not all(elem in self.__constrains for elem in actions) \
-               and all(self.__action_counter[action - 1] > 0 for action in actions)
+        if actions is None:
+            return False
 
-    def take_action(self, actions, event_happened):
+        for constrain in self.__constrains:
+            if all(action in actions for action in constrain):
+                return False
+
+        return all(self.__action_counter[action - 1] > 0 for action in actions)
+
+    def __take_action(self, actions, event_happened):
         """
             Take given actions and event in a year
             :param actions: a tuple of actions
             :param event_happened: event happened for this year
         """
-        if not self.__is_valid_actions(actions):
-            return
-
         # add delayed effects to current effects
         action_effects = self.__delayed_effects.copy()
         self.__delayed_effects.clear()
@@ -529,6 +570,55 @@ class ActionAnalyzer:
             if event_effect:
                 self.__delayed_effects.update(event_effect)
 
+    def __find_next_best_actions(self, verbose=False):
+        """
+            Find best actions for next year
+            :param verbose: set to True to view all the combination details
+            :return: returns the best actions (maximize Operating Profit)
+        """
+        max_operating_profit = 0
+        best_action_combination = ()
+
+        action_combinations = combination(ACTION_NUM, ACTION_SELECTED_NUM)
+
+        # store the data before trial
+        backup_year_data = self.__year_data.copy()
+        backup_action_counter = self.__action_counter.copy()
+        backup_delayed_effects = self.__delayed_effects.copy()
+
+        # event to be happened in this trial
+        event_index = len(self.__year_data) - 1
+        event = self.__events_happened[event_index]
+
+        for action_combination in action_combinations:
+            # recover the data before trial
+            self.__year_data = backup_year_data.copy()
+            self.__action_counter = backup_action_counter.copy()
+            self.__delayed_effects = backup_delayed_effects.copy()
+
+            # try current combination
+            if not self.__is_valid_actions(action_combination):
+                continue
+            self.__take_action(action_combination, event)
+
+            # print details for this combination if verbose is on
+            if verbose:
+                print(action_combination)
+                print(self.get_year_data())
+
+            # save the best solution based on Operating Profit
+            operating_profit = self.get_operating_profit()
+            if operating_profit > max_operating_profit:
+                max_operating_profit = operating_profit
+                best_action_combination = action_combination
+
+        # recover the data before trial
+        self.__year_data = backup_year_data.copy()
+        self.__action_counter = backup_action_counter.copy()
+        self.__delayed_effects = backup_delayed_effects.copy()
+
+        return best_action_combination
+
 
 def main():
     # set up data set
@@ -537,10 +627,11 @@ def main():
     )
 
     # start analyzing
-    action_analyzer.analyze()
+    best_action = action_analyzer.analyze(verbose=True)
+    print("Best Action:", best_action)
 
     # print result
-    year_data = action_analyzer.get_year_data(2)
+    year_data = action_analyzer.get_year_data()
     print(year_data)
 
 
