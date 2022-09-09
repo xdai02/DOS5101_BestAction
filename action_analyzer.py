@@ -159,6 +159,7 @@ ACTIONS = [
     # Action 14: Invest in worker training
     {
         "cogs": (-0.08, True),  # reduce by 8% from Year + 1
+        "sga": (0.03, False),  # increase by 3%
     },
 
     # Action 15: Grow business through investing in e-commerce
@@ -570,14 +571,16 @@ class ActionAnalyzer:
             if event_effect:
                 self.__delayed_effects.update(event_effect)
 
+    # 10 11 12   7478408.97
+
     def __find_next_best_actions(self, verbose=False):
         """
             Find best actions for next year
             :param verbose: set to True to view all the combination details
             :return: returns the best actions (maximize Operating Profit)
         """
-        max_operating_profit = 0
-        best_action_combination = ()
+        # store all the resulting operating profits and corresponding actions
+        combination_result = []
 
         action_combinations = combination(ACTION_NUM, ACTION_SELECTED_NUM)
 
@@ -608,16 +611,28 @@ class ActionAnalyzer:
 
             # save the best solution based on Operating Profit
             operating_profit = self.get_operating_profit()
-            if operating_profit > max_operating_profit:
-                max_operating_profit = operating_profit
-                best_action_combination = action_combination
+            combination_result.append((action_combination, operating_profit))
 
         # recover the data before trial
         self.__year_data = backup_year_data.copy()
         self.__action_counter = backup_action_counter.copy()
         self.__delayed_effects = backup_delayed_effects.copy()
 
-        return best_action_combination
+        # sort combinations in descending order based on Operating Profit
+        combination_result.sort(key=lambda item: item[1], reverse=True)
+
+        # print combinations in descending order based on Operating Profit
+        if verbose:
+            print("=" * 50)
+            print("%8s%18s%20s" % ("Rank", "Actions", "Operating Profit"))
+            print("-" * 50)
+            for i, comb in enumerate(combination_result):
+                print("%8d%18s%20.2f" % (i + 1, comb[0], comb[1]))
+            print("=" * 50)
+            print()
+
+        best_actions = combination_result[0][0]
+        return best_actions
 
 
 def main():
