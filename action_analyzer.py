@@ -17,7 +17,7 @@ ACTIONS_HAPPENED = [
 """
 EVENTS_HAPPENED = [
     5,  # year 1
-    None,  # year 2
+    7,  # year 2
     None,  # year 3
     None,  # year 4
     None,  # year 5
