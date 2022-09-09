@@ -562,7 +562,7 @@ class ActionAnalyzer:
             event = self.__events[event_index]
 
             # get all actions taken up to date
-            all_actions = list(filter(lambda action_happened: action_happened is not None, ACTIONS_HAPPENED))
+            all_actions = list(filter(lambda action_happened: action_happened is not None, self.__actions_happened))
             all_actions = set(itertools.chain(*all_actions))
 
             # find specific event effect from the event
