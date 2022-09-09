@@ -561,8 +561,12 @@ class ActionAnalyzer:
             event_index = event_happened - 1
             event = self.__events[event_index]
 
+            # get all actions taken up to date
+            all_actions = list(filter(lambda action_happened: action_happened is not None, ACTIONS_HAPPENED))
+            all_actions = set(itertools.chain(*all_actions))
+
             # find specific event effect from the event
-            for action in actions:
+            for action in all_actions:
                 if "Action_%d" % action in event:
                     event_effect = event["Action_%d" % action]
                     break
