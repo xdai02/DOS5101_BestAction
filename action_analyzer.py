@@ -642,7 +642,7 @@ def main():
     )
 
     # start analyzing
-    best_actions = action_analyzer.analyze(verbose=True)
+    best_actions = action_analyzer.analyze(verbose=False)
     print("Best Actions:", best_actions)
 
     # print result
