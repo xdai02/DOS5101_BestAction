@@ -571,8 +571,6 @@ class ActionAnalyzer:
             if event_effect:
                 self.__delayed_effects.update(event_effect)
 
-    # 10 11 12   7478408.97
-
     def __find_next_best_actions(self, verbose=False):
         """
             Find best actions for next year
