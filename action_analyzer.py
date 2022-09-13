@@ -8,7 +8,7 @@ ACTIONS_HAPPENED = [
     (4, 11, 13),  # year 1
     (2, 9, 16),  # year 2
     (3, 6, 12),  # year 3
-    None,  # (7, 11, 12) # year 4
+    None,  # year 4
     None,  # year 5
     None,  # year 6
 ]
@@ -563,7 +563,9 @@ class ActionAnalyzer:
             event = self.__events[event_index]
 
             # get all actions taken up to date
-            all_actions = list(filter(lambda action_happened: action_happened is not None, self.__actions_happened))
+            current_year = len(self.__year_data) - 1
+            all_actions = self.__actions_happened[:current_year]
+            all_actions = list(filter(lambda action_happened: action_happened is not None, all_actions))
             all_actions = set(itertools.chain(*all_actions))
 
             # find specific event effect from the event
@@ -645,7 +647,7 @@ def main():
     )
 
     # start analyzing
-    best_actions = action_analyzer.analyze(verbose=False)
+    best_actions = action_analyzer.analyze(verbose=True)
     print("Best Actions:", best_actions)
 
     # print result
