@@ -1,4 +1,5 @@
 import itertools
+import copy
 
 """
     Actions already happened
@@ -6,8 +7,8 @@ import itertools
 ACTIONS_HAPPENED = [
     (4, 11, 13),  # year 1
     (2, 9, 16),  # year 2
-    None,  # year 3
-    None,  # year 4
+    (3, 6, 12),  # year 3
+    None,  # (7, 11, 12) # year 4
     None,  # year 5
     None,  # year 6
 ]
@@ -18,7 +19,7 @@ ACTIONS_HAPPENED = [
 EVENTS_HAPPENED = [
     5,  # year 1
     7,  # year 2
-    None,  # year 3
+    5,  # year 3
     None,  # year 4
     None,  # year 5
     None,  # year 6
@@ -526,7 +527,7 @@ class ActionAnalyzer:
             :param event_happened: event happened for this year
         """
         # add delayed effects to current effects
-        action_effects = self.__delayed_effects.copy()
+        action_effects = copy.deepcopy(self.__delayed_effects)
         self.__delayed_effects.clear()
 
         # get all the effects for each action
@@ -544,7 +545,7 @@ class ActionAnalyzer:
                 else:
                     dict_add(action_effects, item_name, item_changed_rate)
 
-        current_year_data = self.__year_data[-1].copy()
+        current_year_data = copy.deepcopy(self.__year_data[-1])
         self.__year_data.append(current_year_data)
 
         # calculate data after effects
@@ -587,9 +588,9 @@ class ActionAnalyzer:
         action_combinations = combination(ACTION_NUM, ACTION_SELECTED_NUM)
 
         # store the data before trial
-        backup_year_data = self.__year_data.copy()
-        backup_action_counter = self.__action_counter.copy()
-        backup_delayed_effects = self.__delayed_effects.copy()
+        backup_year_data = copy.deepcopy(self.__year_data)
+        backup_action_counter = copy.deepcopy(self.__action_counter)
+        backup_delayed_effects = copy.deepcopy(self.__delayed_effects)
 
         # event to be happened in this trial
         event_index = len(self.__year_data) - 1
@@ -597,9 +598,9 @@ class ActionAnalyzer:
 
         for action_combination in action_combinations:
             # recover the data before trial
-            self.__year_data = backup_year_data.copy()
-            self.__action_counter = backup_action_counter.copy()
-            self.__delayed_effects = backup_delayed_effects.copy()
+            self.__year_data = copy.deepcopy(backup_year_data)
+            self.__action_counter = copy.deepcopy(backup_action_counter)
+            self.__delayed_effects = copy.deepcopy(backup_delayed_effects)
 
             # try current combination
             if not self.__is_valid_actions(action_combination):
@@ -616,9 +617,9 @@ class ActionAnalyzer:
             combination_result.append((action_combination, operating_profit))
 
         # recover the data before trial
-        self.__year_data = backup_year_data.copy()
-        self.__action_counter = backup_action_counter.copy()
-        self.__delayed_effects = backup_delayed_effects.copy()
+        self.__year_data = copy.deepcopy(backup_year_data)
+        self.__action_counter = copy.deepcopy(backup_action_counter)
+        self.__delayed_effects = copy.deepcopy(backup_delayed_effects)
 
         # sort combinations in descending order based on Operating Profit
         combination_result.sort(key=lambda item: item[1], reverse=True)
