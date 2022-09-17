@@ -5,10 +5,10 @@ import copy
     Actions already happened
 """
 ACTIONS_HAPPENED = [
-    (4, 11, 13),  # year 1
+    (4, 11, 13), # year 1
     (2, 9, 16),  # year 2
     (3, 6, 12),  # year 3
-    None,  # year 4
+    (7, 11, 12), # year 4
     None,  # year 5
     None,  # year 6
 ]
@@ -20,7 +20,7 @@ EVENTS_HAPPENED = [
     5,  # year 1
     7,  # year 2
     5,  # year 3
-    None,  # year 4
+    4,  # year 4
     None,  # year 5
     None,  # year 6
 ]
