@@ -60,9 +60,9 @@ YEAR_DATA = [
 ]
 
 """
-    All actions are allowed to be used at most 3 times
+    Action usage counter
 """
-MAX_ACTION_REPEAT = 3
+ACTION_COUNTER = [3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 3, 3]
 
 """
     Number of actions selected for a year
@@ -264,12 +264,12 @@ def combination(n=0, k=0):
 
 
 class ActionAnalyzer:
-    def __init__(self, year_data, actions, max_action_repeat, constrains, events, actions_happened, events_happened):
+    def __init__(self, year_data, actions, action_counter, constrains, events, actions_happened, events_happened):
         """
             Set up date set
             :param year_data: init year data
             :param actions: action set
-            :param max_action_repeat: limit usage for each action
+            :param action_counter: limit usage for each action
             :param constrains: constrained actions
             :param events: event set
             :param actions_happened: actions already happened
@@ -277,7 +277,7 @@ class ActionAnalyzer:
         """
         self.__year_data = year_data
         self.__actions = actions
-        self.__action_counter = [max_action_repeat] * len(actions)
+        self.__action_counter = action_counter
         self.__constrains = constrains
         self.__events = events
         self.__actions_happened = actions_happened
@@ -643,7 +643,7 @@ class ActionAnalyzer:
 def main():
     # set up data set
     action_analyzer = ActionAnalyzer(
-        YEAR_DATA, ACTIONS, MAX_ACTION_REPEAT, CONSTRAINS, EVENTS, ACTIONS_HAPPENED, EVENTS_HAPPENED
+        YEAR_DATA, ACTIONS, ACTION_COUNTER, CONSTRAINS, EVENTS, ACTIONS_HAPPENED, EVENTS_HAPPENED
     )
 
     # start analyzing
